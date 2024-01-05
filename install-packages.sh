@@ -57,8 +57,9 @@ sudo curl -O https://raw.githubusercontent.com/FariusGitHub/CICD/main/Dockerfile
 sudo docker image build -t test . # FOR TESTING ONLY, when succeed an image called Test will be created
 sudo curl -O https://raw.githubusercontent.com/FariusGitHub/CICD/main/pom.xml
 sudo curl -O https://raw.githubusercontent.com/FariusGitHub/CICD/main/config
-sudo curl -O https://raw.githubusercontent.com/FariusGitHub/CICD/main/docker-compose.yml
 export passjenkins=$(sudo cat /var/lib/jenkins/secrets/initialAdminPassword)
 java -jar jenkins-cli.jar -auth admin:$passjenkins -s http://localhost:8080 create-job project6 < config
+cd /var/lib/jenkins/workspace/project6
+sudo curl -O https://raw.githubusercontent.com/FariusGitHub/CICD/main/docker-compose.yml
 #BELOW LINE WILL INITIALLY FAIL UNTIL USERNAME AND PASSWORD WERE CHANGED INSIDE JENKINS WEB UI
 java -jar jenkins-cli.jar -auth admin:$passjenkins -s http://localhost:8080 build project6
