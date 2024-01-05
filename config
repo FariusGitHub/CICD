@@ -15,12 +15,27 @@
                      git branch: 'master', changelog: false, poll: false, url: 'https://github.com/FariusGitHub/Jenkins.git'
                   }
              }
+
+             stage('Test') {
+                steps {
+                    script{
+    
+                     sh 'docker login -u username -p password'
+                     def dockerImages = sh(returnStdout: true, script: 'docker images -q test').trim()
+                     echo "The test dockerImages is: ${dockerImages}"
+                     if (dockerImages == '') {
+                            echo 'built fail'
+                            sh 'fail'
+                         }
+                    }
+                }
+             }             
+
              stage('Build') {
                  steps {
                   script {
                      sh "mvn clean install"
                      sh 'npm install'
-                     sh 'docker login -u username -p password'
                      sh 'docker build -t username/cicd:latest .'
                     }
                  }
