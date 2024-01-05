@@ -20,8 +20,8 @@
                   script {
                      sh "mvn clean install"
                      sh 'npm install'
-                     sh 'docker login -u ftjioesman -p Thx22docker!'
-                     sh 'docker build -t ftjioesman/cicd:latest .'
+                     sh 'docker login -u username -p password'
+                     sh 'docker build -t username/cicd:latest .'
                     }
                  }
              }
@@ -29,7 +29,7 @@
             stage('Push') {
                 steps {
                     script {
-                        sh 'docker push ftjioesman/cicd:latest'
+                        sh 'docker push username/cicd:latest'
                     }
                 }
             }
