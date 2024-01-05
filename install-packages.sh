@@ -45,23 +45,20 @@ sudo apt install nodejs npm -y
 sudo apt update
 sudo npm install
 
-#pulling the jenkins-cli.jar, config.xml, env variable, create project6 pipeline and build remotely
-#!/bin/bash
-sudo git clone -b master https://github.com/FariusGitHub/Jenkins.git
-# sudo git clone -b main https://github.com/spkane/docker-node-hello.git
-cd Jenkins
-# cd docker-node-hello
-# sudo curl -O -L https://github.com/FariusGitHub/Jenkins/blob/master/package.json
-# sudo curl -O -L https://github.com/FariusGitHub/Jenkins/blob/master/pom.xml
-# sudo curl -O -L https://github.com/FariusGitHub/Jenkins/blob/master/config
+## BRINGING BASIC WEBAPP AND ADDING POM, CONFIG, DOCKERFILE AND DOCKER-COMPOSE.YML
+sudo git clone -b main https://github.com/spkane/docker-node-hello
+cd docker-node-hello
 url='http://'
 ip=$(curl http://checkip.amazonaws.com)
 jar=':8080/jnlpJars/jenkins-cli.jar'
 full_url="$url$ip$jar"
 sudo curl -LJO "$full_url"
+sudo curl -O https://raw.githubusercontent.com/FariusGitHub/CICD/main/Dockerfile
+sudo docker image build -t test . # FOR TESTING ONLY, when succeed an image called Test will be created
+sudo curl -O https://raw.githubusercontent.com/FariusGitHub/CICD/main/pom.xml
+sudo curl -O https://raw.githubusercontent.com/FariusGitHub/CICD/main/config
+sudo curl -O https://raw.githubusercontent.com/FariusGitHub/CICD/main/docker-compose.yml
 export passjenkins=$(sudo cat /var/lib/jenkins/secrets/initialAdminPassword)
 java -jar jenkins-cli.jar -auth admin:$passjenkins -s http://localhost:8080 create-job project6 < config
+#BELOW LINE WILL INITIALLY FAIL UNTIL USERNAME AND PASSWORD WERE CHANGED INSIDE JENKINS WEB UI
 java -jar jenkins-cli.jar -auth admin:$passjenkins -s http://localhost:8080 build project6
-
-
-# definitely something different between 50 and 51
