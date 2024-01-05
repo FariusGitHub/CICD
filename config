@@ -1,0 +1,42 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.40">
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.85">
+    <script>
+      pipeline {
+        agent any
+        stages {
+    
+             stage('Source') {
+                 steps {
+                     git branch: 'master', changelog: false, poll: false, url: 'https://github.com/FariusGitHub/Jenkins.git'
+                  }
+             }
+             stage('Build') {
+                 steps {
+                  script {
+                     sh "mvn clean install"
+                     sh 'npm install'
+                     sh 'docker login -u ftjioesman -p Thx22docker!'
+                     sh 'docker build -t ftjioesman/cicd:latest .'
+                    }
+                 }
+             }
+          
+            stage('Push') {
+                steps {
+                    script {
+                        sh 'docker push ftjioesman/cicd:latest'
+                    }
+                }
+            }
+    }
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
