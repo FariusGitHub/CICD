@@ -46,8 +46,12 @@ sudo apt update
 sudo npm install
 
 ## BRINGING BASIC WEBAPP AND ADDING POM, CONFIG, DOCKERFILE AND DOCKER-COMPOSE.YML
+cd /var/lib/jenkins/
+sudo mkdir workspaces
+cd workspaces
 sudo git clone -b main https://github.com/spkane/docker-node-hello
 cd docker-node-hello
+sudo snap install curl
 url='http://'
 ip=$(curl http://checkip.amazonaws.com)
 jar=':8080/jnlpJars/jenkins-cli.jar'
@@ -55,8 +59,8 @@ full_url="$url$ip$jar"
 sudo curl -LJO "$full_url"
 sudo curl -O https://raw.githubusercontent.com/FariusGitHub/CICD/main/Dockerfile
 sudo docker image build -t test . # FOR TESTING ONLY, when succeed an image called Test will be created
-sudo curl -O https://raw.githubusercontent.com/FariusGitHub/CICD/main/pom.xml
-sudo curl -O https://raw.githubusercontent.com/FariusGitHub/CICD/main/config
+sudo wget https://raw.githubusercontent.com/FariusGitHub/CICD/main/pom.xml
+sudo wget https://raw.githubusercontent.com/FariusGitHub/CICD/main/config
 export passjenkins=$(sudo cat /var/lib/jenkins/secrets/initialAdminPassword)
 java -jar jenkins-cli.jar -auth admin:$passjenkins -s http://localhost:8080 create-job project6 < config
 cd /var/lib/jenkins/workspace/project6
